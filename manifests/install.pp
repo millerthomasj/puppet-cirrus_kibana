@@ -4,5 +4,8 @@ class twc_kibana::install ()
     default_vhost => false,
   }
 
-  include kibana3
+  class { '::kibana3':
+    manage_git => false,
+    manage_git_repository => false,
+  }
 }
