@@ -5,5 +5,6 @@ class twc_kibana::install ()
   }
 
   class { '::kibana':
+    bind => $::ipaddress,
   }
 }
