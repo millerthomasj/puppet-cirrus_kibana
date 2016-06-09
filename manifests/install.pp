@@ -1,10 +1,6 @@
 class twc_kibana::install ()
 {
-  class { 'apache':
-    default_vhost => false,
-  }
-
   class { '::kibana':
-    bind => $::ipaddress,
+    es_url => "http://${::ipaddress}:9200,
   }
 }
