@@ -9,4 +9,5 @@ class cirrus_kibana::params
   $kibana_manage_repo = false
   $kibana_proxy = true
   $kibana_proxy_agent = apache
+  $kibana_import_dir = '/opt/kibana/importJSON'
 }
