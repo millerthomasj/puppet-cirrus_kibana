@@ -1,0 +1,18 @@
+{
+  "title": "message-KeyError_openstack_logs",
+  "description": "Find 'KeyError' in openstack logs",
+  "hits": 0,
+  "columns": [
+    "hostname",
+    "source",
+    "message"
+  ],
+  "sort": [
+    "@timestamp",
+    "desc"
+  ],
+  "version": 1,
+  "kibanaSavedObjectMeta": {
+    "searchSourceJSON": "{\"index\":\"logstash-*\",\"query\":{\"query_string\":{\"query\":\"message:\\\"KeyError\\\"\",\"analyze_wildcard\":true}},\"filter\":[{\"meta\":{\"negate\":true,\"index\":\"logstash-*\",\"key\":\"source\",\"value\":\"/var/log/syslog\",\"disabled\":false,\"alias\":null},\"query\":{\"match\":{\"source\":{\"query\":\"/var/log/syslog\",\"type\":\"phrase\"}}},\"$state\":{\"store\":\"appState\"}}],\"highlight\":{\"pre_tags\":[\"@kibana-highlighted-field@\"],\"post_tags\":[\"@/kibana-highlighted-field@\"],\"fields\":{\"*\":{}},\"require_field_match\":false,\"fragment_size\":2147483647}}"
+  }
+}

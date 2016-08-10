@@ -8,4 +8,8 @@ class cirrus_kibana::dashboard
     content => 'all_warnings.json.erb',
     type    => 'dashboard',
   }
+  cirrus_kibana::import { 'metrics-logstash_performance_per_host':
+    content => 'metrics-logstash_performance_per_host.json.erb',
+    type    => 'dashboard',
+  }
 }

@@ -1,0 +1,10 @@
+{
+  "title": "pie-log_count_per_logstash_host",
+  "visState": "{\"title\":\"pie-log_count_per_logstash_host\",\"type\":\"pie\",\"params\":{\"shareYAxis\":true,\"addTooltip\":true,\"addLegend\":true,\"isDonut\":false},\"aggs\":[{\"id\":\"1\",\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"metrics.logstash_host.raw\",\"size\":5,\"order\":\"asc\",\"orderBy\":\"_term\"}}],\"listeners\":{}}",
+  "uiStateJSON": "{\"vis\":{\"colors\":{\"<%= scope.lookupvar('::cirrus_site_iteration') %>-logstash-001.os.cloud.twc.net\":\"#99440A\",\"<%= scope.lookupvar('::cirrus_site_iteration') %>-logstash-002.os.cloud.twc.net\":\"#F2C96D\",\"<%= scope.lookupvar('::cirrus_site_iteration') %>-logstash-003.os.cloud.twc.net\":\"#447EBC\"}}}",
+  "description": "Count Docs per Logstash Host",
+  "version": 1,
+  "kibanaSavedObjectMeta": {
+    "searchSourceJSON": "{\"index\":\"logstash-*\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"
+  }
+}

@@ -16,4 +16,8 @@ class cirrus_kibana::search
     content => 'tenable-system_logins.json.erb',
     type    => 'search',
   }
+  cirrus_kibana::import { 'message-KeyError_openstack_logs':
+    content => 'message-KeyError_openstack_logs.json.erb',
+    type    => 'search',
+  }
 }

@@ -1,0 +1,10 @@
+{
+  "title": "datehisto-logstash_count_per_host",
+  "visState": "{\"title\":\"datehisto-logstash_count_per_host\",\"type\":\"histogram\",\"params\":{\"shareYAxis\":true,\"addTooltip\":true,\"addLegend\":true,\"scale\":\"linear\",\"mode\":\"grouped\",\"times\":[],\"addTimeMarker\":false,\"defaultYExtents\":false,\"setYExtents\":false,\"yAxis\":{}},\"aggs\":[{\"id\":\"1\",\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"type\":\"date_histogram\",\"schema\":\"segment\",\"params\":{\"field\":\"@timestamp\",\"interval\":\"h\",\"customInterval\":\"2h\",\"min_doc_count\":1,\"extended_bounds\":{}}},{\"id\":\"3\",\"type\":\"terms\",\"schema\":\"group\",\"params\":{\"field\":\"metrics.logstash_host.raw\",\"size\":5,\"order\":\"asc\",\"orderBy\":\"_term\"}}],\"listeners\":{}}",
+  "uiStateJSON": "{\"vis\":{\"colors\":{\"<%= scope.lookupvar('::cirrus_site_iteration') %>-logstash-001.os.cloud.twc.net\":\"#99440A\",\"<%= scope.lookupvar('::cirrus_site_iteration') %>-logstash-002.os.cloud.twc.net\":\"#F2C96D\",\"<%= scope.lookupvar('::cirrus_site_iteration') %>-logstash-003.os.cloud.twc.net\":\"#447EBC\"}}}",
+  "description": "Document count per Logstash Host",
+  "version": 1,
+  "kibanaSavedObjectMeta": {
+    "searchSourceJSON": "{\"index\":\"logstash-*\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"
+  }
+}

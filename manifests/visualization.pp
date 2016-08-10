@@ -24,4 +24,20 @@ class cirrus_kibana::visualization
     content => 'pie-warnings_by_host.json.erb',
     type    => 'visualization',
   }
+  cirrus_kibana::import { 'count-all_docs':
+    content => 'count-all_docs.json.erb',
+    type    => 'visualization',
+  }
+  cirrus_kibana::import { 'datehisto-logstash_count_per_host':
+    content => 'datehisto-logstash_count_per_host.json.erb',
+    type    => 'visualization',
+  }
+  cirrus_kibana::import { 'datehisto-logstash_lag_per_host':
+    content => 'datehisto-logstash_lag_per_host.json.erb',
+    type    => 'visualization',
+  }
+  cirrus_kibana::import { 'pie-log_count_per_logstash_host':
+    content => 'pie-log_count_per_logstash_host.json.erb',
+    type    => 'visualization',
+  }
 }
