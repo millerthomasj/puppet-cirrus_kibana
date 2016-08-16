@@ -1,0 +1,15 @@
+{
+  "title": "metrics-loglevel_count_by_time_host_and_source",
+  "hits": 0,
+  "description": "Provide Metrics for Loglevel by Time, Host, and Source",
+  "panelsJSON": "[{\"col\":1,\"id\":\"datehisto-loglevel_count\",\"panelIndex\":1,\"row\":1,\"size_x\":12,\"size_y\":3,\"type\":\"visualization\"},{\"col\":1,\"id\":\"pie-loglevel_per_host\",\"panelIndex\":2,\"row\":4,\"size_x\":6,\"size_y\":5,\"type\":\"visualization\"},{\"col\":7,\"columns\":[\"hostname\",\"loglevel\",\"message\"],\"id\":\"loglevel-star\",\"panelIndex\":3,\"row\":4,\"size_x\":6,\"size_y\":5,\"sort\":[\"@timestamp\",\"desc\"],\"type\":\"search\"}]",
+  "optionsJSON": "{\"darkTheme\":true}",
+  "uiStateJSON": "{}",
+  "version": 1,
+  "timeRestore": true,
+  "timeTo": "now",
+  "timeFrom": "now/d",
+  "kibanaSavedObjectMeta": {
+    "searchSourceJSON": "{\"filter\":[{\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}}}]}"
+  }
+}

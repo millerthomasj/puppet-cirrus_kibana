@@ -40,4 +40,12 @@ class cirrus_kibana::visualization
     content => 'pie-log_count_per_logstash_host.json.erb',
     type    => 'visualization',
   }
+  cirrus_kibana::import { 'datehisto-loglevel_count':
+    content => 'datehisto-loglevel_count.json.erb',
+    type    => 'visualization',
+  }
+  cirrus_kibana::import { 'pie-loglevel_per_host':
+    content => 'pie-loglevel_per_host.json.erb',
+    type    => 'visualization',
+  }
 }
