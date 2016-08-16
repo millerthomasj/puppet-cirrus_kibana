@@ -55,7 +55,7 @@ define cirrus_kibana::import(
     fail("\"${port}\" is not an integer")
   }
 
-  if ! ($type in [ 'search', 'visualization', 'dashboard' ]) {
+  if ! ($type in [ 'search', 'visualization', 'dashboard', 'config' ]) {
     fail("\"${type}\" is not a valid type parameter value")
   }
 

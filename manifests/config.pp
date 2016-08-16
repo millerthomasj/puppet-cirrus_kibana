@@ -41,4 +41,20 @@ class cirrus_kibana::config(
     mode    => '0755',
     require => File[$import_dir],
   }
+
+  file { "${import_dir}/config":
+    ensure  => directory,
+    path    => "${import_dir}/config",
+    owner   => 'kibana',
+    group   => 'kibana',
+    mode    => '0755',
+    require => File[$import_dir],
+  }
+
+  if $::elasticsearch_9200_cluster_status == 'green' {
+    cirrus_kibana::import { $cirrus_kibana::params::kibana_version: # lint:ignore:only_variable_string
+      content => 'kibana-config.json.erb',
+      type    => 'config',
+    }
+  }
 }
