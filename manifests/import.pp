@@ -69,23 +69,10 @@ define cirrus_kibana::import(
   # Build up the url
   $es_url = "${protocol}://${host}:${port}/.kibana/${type}/${name}"
 
-  if ($ensure == 'present') {
-    if $content == undef {
-      fail("The variable 'content' cannot be empty when inserting or updating a ${type}.")
-    } else { # we are good to go. notify to insert in case we deleted
-      $insert_notify = Exec[ "insert_${type}_${name}" ]
-    }
-  } else {
-    $insert_notify = undef
-  }
-
   # Delete the existing item
-  # First check if it exists of course
   exec { "delete_${type}_${name}":
-    command     => "curl ${ssl_args} -s -XDELETE ${es_url}",
-    onlyif      => "test $(curl ${ssl_args} -s '${es_url}?pretty=true' | grep -c '\"found\" : true') -eq 1",
-    notify      => $insert_notify,
-    refreshonly => true,
+    command => "curl ${ssl_args} -s -XDELETE ${es_url}",
+    onlyif  => "test $(curl ${ssl_args} -s '${es_url}?pretty=true' | grep -c '\"found\" : true') -eq 1",
   }
 
   if ($ensure == 'absent') {
@@ -101,13 +88,12 @@ define cirrus_kibana::import(
     file { "${cirrus_kibana::params::kibana_import_dir}/${type}/${name}.json":
       ensure  => file,
       content => template("${module_name}/${type}/${content}"),
-      notify  => Exec[ "delete_${type}_${name}" ],
     }
 
     exec { "insert_${type}_${name}":
       command     => "curl ${ssl_args} -sL -w \"%{http_code}\\n\" -XPUT ${es_url} -d @${cirrus_kibana::params::kibana_import_dir}/${type}/${name}.json -o /dev/null | egrep \"(200|201)\" > /dev/null",
-      unless      => "test $(curl ${ssl_args} -s '${es_url}?pretty=true' | grep -c '\"found\" : true') -eq 1",
-      refreshonly => true,
     }
   }
+
+  File["${cirrus_kibana::params::kibana_import_dir}/${type}/${name}.json"] -> Exec["delete_${type}_${name}"] -> Exec["insert_${type}_${name}"]
 }
