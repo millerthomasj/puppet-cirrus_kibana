@@ -34,8 +34,6 @@ class cirrus_kibana (
   $kibana_import_dir  = $cirrus_kibana::params::kibana_import_dir,
   $use_ssl            = false,
   $validate_ssl       = true,
-  $ssl_user           = undef,
-  $ssl_password       = undef
 ) inherits cirrus_kibana::params
 {
   validate_bool($kibana_proxy)
@@ -63,9 +61,16 @@ class cirrus_kibana (
     if $kibana_proxy_agent == 'apache' {
       validate_hash($kibana_users)
 
-      class { '::cirrus_kibana::apache':
-        vhostname => $::fqdn,
-        users     => $kibana_users,
+      if $::cirrus_elasticsearch::xpack_install {
+        class { '::cirrus_kibana::apache':
+          vhostname => $::fqdn,
+          users     => {},
+        }
+      } else {
+        class { '::cirrus_kibana::apache':
+          vhostname => $::fqdn,
+          users     => $kibana_users,
+        }
       }
     } else {
       class { '::cirrus_kibana::nginx':
@@ -74,26 +79,44 @@ class cirrus_kibana (
     }
   }
 
+  if $::cirrus_elasticsearch::xpack_install {
+    $use_login = true
+    $elastic_username = $::cirrus_elasticsearch::xpack::users::kibana_username
+    $elastic_password = $::cirrus_elasticsearch::xpack::users::kibana_password
+  } else {
+    $elastic_username   = undef
+    $elastic_password   = undef
+  }
+
   # Setup SSL authentication args for use in any type that hits an api
   if $use_ssl {
-    validate_string($ssl_user)
-    validate_string($ssl_password)
+    validate_string($elastic_username)
+    validate_string($elastic_password)
     $protocol = 'https'
     if $validate_ssl {
-      $ssl_args = "-u ${ssl_user}:${ssl_password}"
+      $curl_args = "-u ${elastic_username}:${elastic_password}"
     } else {
-      $ssl_args = "-k -u ${ssl_user}:${ssl_password}"
+      $curl_args = "-k -u ${elastic_username}:${elastic_password}"
     }
+  } elsif $use_login {
+    validate_string($elastic_username)
+    validate_string($elastic_password)
+    $protocol = 'http'
+    $curl_args = "-u ${elastic_username}:${elastic_password}"
   } else {
     $protocol = 'http'
     # lint:ignore:empty_string_assignment
-    $ssl_args = ''
+    $curl_args = ''
     # lint:endignore
   }
 
-  if $::elasticsearch_9200_cluster_status == 'green' {
-    include ::cirrus_kibana::search
-    include ::cirrus_kibana::visualization
-    include ::cirrus_kibana::dashboard
+  class { '::cirrus_kibana::search':
+    require => Es_Instance_Conn_Validator[$::cirrus_elasticsearch::es_name],
+  }
+  class { '::cirrus_kibana::visualization':
+    require => Es_Instance_Conn_Validator[$::cirrus_elasticsearch::es_name],
+  }
+  class { '::cirrus_kibana::dashboard':
+    require => Es_Instance_Conn_Validator[$::cirrus_elasticsearch::es_name],
   }
 }
