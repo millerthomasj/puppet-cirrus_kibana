@@ -1,9 +1,11 @@
 {
-  "title": "tenable_system-logins",
-  "description": "Find all users who have logged into Tenable.",
+  "title": "tenable-system_logins",
+  "description": "Find all logins by user 'tenable' on infra servers; tenable logins are evidence of vulnerability scans",
   "hits": 0,
   "columns": [
-    "_source"
+    "hostname",
+    "source",
+    "message"
   ],
   "sort": [
     "@timestamp",
@@ -11,6 +13,6 @@
   ],
   "version": 1,
   "kibanaSavedObjectMeta": {
-     "searchSourceJSON": "{\"index\":\"logstash-*\",\"query\":{\"query_string\":{\"query\":\"program:system-logind AND tenable\",\"analyze_wildcard\":true}},\"filter\":[],\"highlight\":{\"pre_tags\":[\"@kibana-highlighted-field@\"],\"post_tags\":[\"@/kibana-highlighted-field@\"],\"fields\":{\"*\":{}},\"require_field_match\":false,\"fragment_size\":2147483647}}"
+    "searchSourceJSON": "{\"index\":\"logstash-*\",\"query\":{\"query_string\":{\"query\":\"program:system-logind AND tenable\",\"analyze_wildcard\":true}},\"filter\":[{\"meta\":{\"negate\":false,\"index\":\"logstash-*\",\"key\":\"tags\",\"value\":\"auth\",\"disabled\":false,\"alias\":null},\"query\":{\"match\":{\"tags\":{\"query\":\"auth\",\"type\":\"phrase\"}}},\"$state\":{\"store\":\"appState\"}}],\"highlight\":{\"pre_tags\":[\"@kibana-highlighted-field@\"],\"post_tags\":[\"@/kibana-highlighted-field@\"],\"fields\":{\"*\":{}},\"require_field_match\":false,\"fragment_size\":2147483647}}"
   }
 }

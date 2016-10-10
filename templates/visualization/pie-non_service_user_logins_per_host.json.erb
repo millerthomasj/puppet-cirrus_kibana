@@ -1,0 +1,11 @@
+{
+  "title": "pie-non_service_user_logins_per_host",
+  "visState": "{\"title\":\"New Visualization\",\"type\":\"pie\",\"params\":{\"shareYAxis\":true,\"addTooltip\":true,\"addLegend\":true,\"isDonut\":false},\"aggs\":[{\"id\":\"1\",\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"hostname.raw\",\"size\":30,\"order\":\"desc\",\"orderBy\":\"1\",\"customLabel\":\"Hostname\"}}],\"listeners\":{}}",
+  "uiStateJSON": "{}",
+  "description": "Pie chart of non-service-account user logins by host",
+  "savedSearchId": "user-logins_non-service-accounts",
+  "version": 1,
+  "kibanaSavedObjectMeta": {
+    "searchSourceJSON": "{\"filter\":[]}"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "title": "failed-system-logins_connection-closed-by-peer_OR_invalid-user",
+  "description": "Search message for 'connection closed by' or 'invalid user' strings in 'preauth' for SSH; filter on tags:auth",
+  "hits": 0,
+  "columns": [
+    "hostname",
+    "source",
+    "message"
+  ],
+  "sort": [
+    "@timestamp",
+    "desc"
+  ],
+  "version": 1,
+  "kibanaSavedObjectMeta": {
+    "searchSourceJSON": "{\"index\":\"logstash-*\",\"filter\":[{\"meta\":{\"negate\":false,\"index\":\"logstash-*\",\"key\":\"tags\",\"value\":\"auth\",\"disabled\":false,\"alias\":null},\"query\":{\"match\":{\"tags\":{\"query\":\"auth\",\"type\":\"phrase\"}}},\"$state\":{\"store\":\"globalState\"}}],\"highlight\":{\"pre_tags\":[\"@kibana-highlighted-field@\"],\"post_tags\":[\"@/kibana-highlighted-field@\"],\"fields\":{\"*\":{}},\"require_field_match\":false,\"fragment_size\":2147483647},\"query\":{\"query_string\":{\"query\":\"message:\\\"preauth\\\" AND (\\\"connection closed by\\\" OR \\\"invalid user\\\")\",\"analyze_wildcard\":true}}}"
+  }
+}

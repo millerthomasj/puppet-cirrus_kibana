@@ -1,0 +1,10 @@
+{
+  "title": "markdown-security_dashboard-system_logins",
+  "visState": "{\"title\":\"markdown-security_dashboard-system_logins\",\"type\":\"markdown\",\"params\":{\"markdown\":\"# Security Dashboard:  System Logins\\n### How to Interpret this Dashboard\\n#### This dashboard is roughly arranged into left- and right-side information, and is best followed from top to bottom for a given side:\\n - _**The left side** displays info for **FAILED** system logins_. The top two histograms show different forms of failed logins, and the third (bottom) histogram shows logins by the Tenable vulnerability scanner. Compare spikes in the top two histograms to vulnerability scanner activity in the bottom histogram to look for anomalous login behavior (e.g. if a login failure spike coincides with a Tenable scan spike, the latter _probably_ caused the former).\\n - _**The right side** displays info for **SUCCESSFUL** system logins_ by regular (non-service) users. The histogram shows the number of user logins over time; the pie chart shows the distribution of user logins per host.\\n - _**At the bottom of either side**_, the tables allow you to view the specific log messages that were used to create the visualizations directly above a given table.\"},\"aggs\":[],\"listeners\":{}}",
+  "uiStateJSON": "{}",
+  "description": "Markdown widget to explain how to use the Security Dashboard for Failed and Successful System Logins",
+  "version": 1,
+  "kibanaSavedObjectMeta": {
+    "searchSourceJSON": "{\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}},\"filter\":[]}"
+  }
+}
