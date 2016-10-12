@@ -36,13 +36,13 @@
 #
 
 define cirrus_kibana::import(
-  $ensure   = 'present',
-  $content  = undef,
-  $host     = 'localhost',
-  $port     = 9200,
-  $protocol = $::cirrus_kibana::protocol,
-  $ssl_args = $::cirrus_kibana::ssl_args,
-  $type     = undef
+  $ensure    = 'present',
+  $content   = undef,
+  $host      = 'localhost',
+  $port      = 9200,
+  $protocol  = $::cirrus_kibana::protocol,
+  $curl_args = $::cirrus_kibana::curl_args,
+  $type      = undef
 ) {
   require ::elasticsearch
 
@@ -71,8 +71,8 @@ define cirrus_kibana::import(
 
   # Delete the existing item
   exec { "delete_${type}_${name}":
-    command => "curl ${ssl_args} -s -XDELETE ${es_url}",
-    onlyif  => "test $(curl ${ssl_args} -s '${es_url}?pretty=true' | grep -c '\"found\" : true') -eq 1",
+    command => "curl ${curl_args} -s -XDELETE ${es_url}",
+    onlyif  => "test $(curl ${curl_args} -s '${es_url}?pretty=true' | grep -c '\"found\" : true') -eq 1",
   }
 
   if ($ensure == 'absent') {
@@ -91,7 +91,7 @@ define cirrus_kibana::import(
     }
 
     exec { "insert_${type}_${name}":
-      command     => "curl ${ssl_args} -sL -w \"%{http_code}\\n\" -XPUT ${es_url} -d @${cirrus_kibana::params::kibana_import_dir}/${type}/${name}.json -o /dev/null | egrep \"(200|201)\" > /dev/null",
+      command     => "curl ${curl_args} -sL -w \"%{http_code}\\n\" -XPUT ${es_url} -d @${cirrus_kibana::params::kibana_import_dir}/${type}/${name}.json -o /dev/null | egrep \"(200|201)\" > /dev/null",
     }
   }
 
