@@ -94,15 +94,15 @@ class cirrus_kibana (
     validate_string($elastic_password)
     $protocol = 'https'
     if $validate_ssl {
-      $curl_args = "-u ${elastic_username}:${elastic_password}"
+      $curl_args = "-u '${elastic_username}':'${elastic_password}'"
     } else {
-      $curl_args = "-k -u ${elastic_username}:${elastic_password}"
+      $curl_args = "-k -u '${elastic_username}':'${elastic_password}'"
     }
   } elsif $use_login {
     validate_string($elastic_username)
     validate_string($elastic_password)
     $protocol = 'http'
-    $curl_args = "-u ${elastic_username}:${elastic_password}"
+    $curl_args = "-u '${elastic_username}':'${elastic_password}'"
   } else {
     $protocol = 'http'
     # lint:ignore:empty_string_assignment
