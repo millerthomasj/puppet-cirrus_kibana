@@ -26,31 +26,61 @@
 #
 
 class cirrus_kibana (
-  $kibana_version     = $cirrus_kibana::params::kibana_version,
-  $kibana_manage_repo = $cirrus_kibana::params::kibana_manage_repo,
-  $kibana_proxy       = $cirrus_kibana::params::kibana_proxy,
-  $kibana_proxy_agent = $cirrus_kibana::params::kibana_proxy_agent,
-  $kibana_users       = {},
-  $kibana_import_dir  = $cirrus_kibana::params::kibana_import_dir,
-  $use_ssl            = false,
-  $validate_ssl       = true,
+  $kibana_version        = $cirrus_kibana::params::kibana_version,
+  $kibana_manage_repo    = $cirrus_kibana::params::kibana_manage_repo,
+  $kibana_proxy          = $cirrus_kibana::params::kibana_proxy,
+  $kibana_proxy_agent    = $cirrus_kibana::params::kibana_proxy_agent,
+  $kibana_users          = {},
+  $kibana_import_dir     = $cirrus_kibana::params::kibana_import_dir,
+  $kibana_ssl_cert       = undef,
+  $kibana_ssl_key        = undef,
+  $ssl_cert_path         = $cirrus_kibana::params::ssl_cert_path,
+  $use_ssl               = false,
+  $validate_ssl          = true,
+  $shield_encryption_key = $cirrus_kibana::params::shield_encryption_key,
 ) inherits cirrus_kibana::params
 {
   validate_bool($kibana_proxy)
 
   include ::cirrus::repo::kibana
 
+  if $::cirrus_elasticsearch::xpack_install {
+    class { '::cirrus_kibana::ssl':
+      ssl_cert_path => $ssl_cert_path,
+      ssl_cert      => $kibana_ssl_cert,
+      ssl_key       => $kibana_ssl_key,
+      require       => Class['kibana4'],
+    }
+
+    $_config = {
+      'elasticsearch.username' => $::cirrus_elasticsearch::xpack::users::kibana_username,
+      'elasticsearch.password' => $::cirrus_elasticsearch::xpack::users::kibana_password,
+      'shield.encryptionKey'   => $shield_encryption_key,
+      'server.ssl.cert'        => "${ssl_cert_path}/${::fqdn}.pem",
+      'server.ssl.key'         => "${ssl_cert_path}/keys/${::fqdn}.pem",
+    }
+    kibana4::plugin { "kibana/shield/${::elasticsearch_9200_version}":
+      ensure          => present,
+      plugin_dest_dir => 'shield',
+      require         => Class['kibana4'],
+    }
+  } else {
+    $_config = {}
+  }
+
   class { '::kibana4':
     version     => $kibana_version,
     manage_repo => $kibana_manage_repo,
-    plugins     => {
-      'elastic/sense' => {
-        ensure          => present, # lint:ignore:ensure_first_param
-        plugin_dest_dir => 'sense',
-      }
-    }
+    config      => $_config,
+    require     => Class['elasticsearch'],
   } -> class { '::cirrus_kibana::config':
     import_dir => $kibana_import_dir
+  }
+
+  kibana4::plugin { 'elastic/sense':
+    ensure          => present,
+    plugin_dest_dir => 'sense',
+    require         => Class['kibana4'],
   }
 
   if $kibana_proxy {
