@@ -64,6 +64,12 @@ class cirrus_kibana (
       plugin_dest_dir => 'shield',
       require         => Class['kibana4'],
     }
+    kibana4::plugin { 'marvel':
+      ensure          => present,
+      plugin_dest_dir => 'marvel',
+      url             => 'https://download.elasticsearch.org/elasticsearch/marvel/marvel-2.3.3.tar.gz',
+      require         => Class['kibana4'],
+    }
   } else {
     $_config = {}
   }
