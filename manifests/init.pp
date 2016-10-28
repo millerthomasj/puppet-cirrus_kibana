@@ -70,6 +70,11 @@ class cirrus_kibana (
       url             => 'https://download.elasticsearch.org/elasticsearch/marvel/marvel-2.3.3.tar.gz',
       require         => Class['kibana4'],
     }
+    kibana4::plugin { "elasticsearch/graph/${::elasticsearch_9200_version}":
+      ensure          => present,
+      plugin_dest_dir => 'graph',
+      require         => Class['kibana4'],
+    }
   } else {
     $_config = {}
   }
