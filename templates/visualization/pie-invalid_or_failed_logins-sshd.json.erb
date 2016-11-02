@@ -1,0 +1,93 @@
+{
+  "title": "pie-invalid_or_failed_logins-sshd",
+  "visState": "{
+    \"aggs\": [
+      {
+        \"id\": \"1\",
+        \"params\": {},
+        \"schema\": \"metric\",
+        \"type\": \"count\"
+      },
+      {
+        \"id\": \"2\",
+        \"params\": {
+          \"customInterval\": \"2h\",
+          \"extended_bounds\": {},
+          \"field\": \"@timestamp\",
+          \"interval\": \"d\",
+          \"min_doc_count\": 1
+        },
+        \"schema\": \"segment\",
+        \"type\": \"date_histogram\"
+      },
+      {
+        \"id\": \"3\",
+        \"params\": {
+          \"filters\": [
+            {
+              \"input\": {
+                \"query\": {
+                  \"query_string\": {
+                    \"analyze_wildcard\": true,
+                    \"query\": \"fields.sshd.user.raw:ansible\"
+                  }
+                }
+              },
+              \"label\": \"Ansible Caused\"
+            },
+            {
+              \"input\": {
+                \"query\": {
+                  \"query_string\": {
+                    \"analyze_wildcard\": true,
+                    \"query\": \"<%= @tenable_ip_list %>\"
+                  }
+                }
+              },
+              \"label\": \"Tenable Caused\"
+            },
+            {
+              \"input\": {
+                \"query\": {
+                  \"query_string\": {
+                    \"analyze_wildcard\": true,
+                    \"query\": \"<%= @negated_tenable_ip_list %> NOT fields.sshd.user.raw:ansible\"
+                  }
+                }
+              },
+              \"label\": \"Not Ansible or Tenable\"
+            }
+          ]
+        },
+        \"schema\": \"segment\",
+        \"type\": \"filters\"
+      }
+    ],
+    \"listeners\": {},
+    \"params\": {
+      \"addLegend\": true,
+      \"addTooltip\": true,
+      \"isDonut\": true,
+      \"shareYAxis\": true
+    },
+    \"title\": \"New Visualization\",
+    \"type\": \"pie\"
+  }",
+  "uiStateJSON": "{
+    \"vis\": {
+      \"colors\": {
+        \"Ansible Caused\": \"#0A437C\",
+        \"Not Ansible or Tenable\": \"#890F02\",
+        \"Tenable Caused\": \"#508642\"
+      }
+    }
+  }",
+  "description": "SSHD Failed or Invalid Logins by DataHistogram",
+  "savedSearchId": "sshd-failed_or_invalid_logins",
+  "version": 1,
+  "kibanaSavedObjectMeta": {
+    "searchSourceJSON": "{
+      \"filter\": []
+    }"
+  }
+}

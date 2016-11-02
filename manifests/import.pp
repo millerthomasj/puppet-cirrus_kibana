@@ -8,12 +8,6 @@
 #   String. Controls if the managed resources shall be <tt>present</tt> or
 #   <tt>absent</tt>. If set to <tt>absent</tt>:
 #
-# [*content*]
-#   Contents of the template ( json )
-#   Value type is string
-#   Default value: undef
-#   This variable is optional
-#
 # [*host*]
 #   Host name or IP address of the ES instance to connect to
 #   Value type is string
@@ -36,13 +30,14 @@
 #
 
 define cirrus_kibana::import(
-  $ensure    = 'present',
-  $content   = undef,
-  $host      = 'localhost',
-  $port      = 9200,
-  $protocol  = $::cirrus_kibana::protocol,
-  $curl_args = $::cirrus_kibana::curl_args,
-  $type      = undef
+  $ensure      = 'present',
+  $content     = undef,
+  $host        = 'localhost',
+  $port        = 9200,
+  $protocol    = $::cirrus_kibana::protocol,
+  $curl_args   = $::cirrus_kibana::curl_args,
+  $type        = undef,
+  $tenable_ips = hiera('tenable_scanner_ip_list', undef)
 ) {
   require ::elasticsearch
 
@@ -57,6 +52,20 @@ define cirrus_kibana::import(
 
   if ! ($type in [ 'search', 'visualization', 'dashboard', 'config' ]) {
     fail("\"${type}\" is not a valid type parameter value")
+  }
+
+  if $content == undef {
+    $_content = "${name}.json.erb"
+  } else {
+    $_content = $content
+  }
+
+  if $tenable_ips == undef {
+    $tenable_ip_list = undef
+    $negated_tenable_ip_list = undef
+  } else {
+    $tenable_ip_list = $tenable_ips.map |$ip| { "fields.sshd.remote_addr.raw:${ip}" }.join(' OR ')
+    $negated_tenable_ip_list = $tenable_ips.map |$ip| { "NOT fields.sshd.remote_addr.raw:${ip}" }.join(' ')
   }
 
   Exec {
@@ -87,7 +96,7 @@ define cirrus_kibana::import(
     # place the template file using content
     file { "${cirrus_kibana::params::kibana_import_dir}/${type}/${name}.json":
       ensure  => file,
-      content => template("${module_name}/${type}/${content}"),
+      content => template("${module_name}/${type}/${_content}"),
     }
 
     exec { "insert_${type}_${name}":

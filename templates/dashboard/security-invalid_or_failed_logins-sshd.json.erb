@@ -1,0 +1,75 @@
+{
+  "title": "security-sshd_invalid_or_failed_logins",
+  "hits": 0,
+  "description": "Provide Security Dashboard for SSHD logins",
+  "panelsJSON": "[
+    {
+      \"col\":1,
+      \"id\":\"pie-invalid_or_failed_logins-sshd\",
+      \"panelIndex\":2,
+      \"row\":1,
+      \"size_x\":7,
+      \"size_y\":4,
+      \"type\":\"visualization\"
+    },
+    {
+      \"col\":1,
+      \"columns\":[
+        \"fields.sshd.user\",
+        \"fields.sshd.remote_addr\",
+        \"message\"
+      ],
+      \"id\":\"sshd-failed_or_invalid_logins\",
+      \"panelIndex\":3,
+      \"row\":5,
+      \"size_x\":10,
+      \"size_y\":3,
+      \"sort\":[
+        \"@timestamp\",
+        \"desc\"
+      ],
+      \"type\":\"search\"
+    }
+  ]",
+  "optionsJSON": "{
+    \"darkTheme\":true
+  }",
+  "uiStateJSON": "{}",
+  "version": 1,
+  "timeRestore": true,
+  "timeTo": "now",
+  "timeFrom": "now-7d",
+  "kibanaSavedObjectMeta": {
+    "searchSourceJSON": "{
+      \"filter\":[
+        {
+          \"query\":{
+            \"query_string\":{
+              \"analyze_wildcard\":true,
+              \"query\":\"<%= @negated_tenable_ip_list %> NOT fields.sshd.user.raw:ansible\"
+            }
+          },
+          \"meta\":{
+            \"index\":\"logstash-*\",
+            \"key\":\"query\",
+            \"value\":\"<%= @negated_tenable_ip_list %> NOT fields.sshd.user.raw:ansible\",
+            \"disabled\":false,
+            \"negate\":false,
+            \"alias\":null
+          },
+          \"$state\":{
+            \"store\":\"appState\"
+          }
+        },
+        {
+          \"query\":{
+            \"query_string\":{
+              \"analyze_wildcard\":true,
+              \"query\":\"*\"
+            }
+          }
+        }
+      ]
+    }"
+  }
+}
