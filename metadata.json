@@ -15,7 +15,6 @@
     {
       "name":"evenup-kibana",
       "version_requirement":">= 2.5.0"
-    },
+    }
   ]
 }
-
