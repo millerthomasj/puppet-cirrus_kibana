@@ -51,9 +51,11 @@ class cirrus_kibana::config(
     require => File[$import_dir],
   }
 
-  cirrus_kibana::import { $cirrus_kibana::params::kibana_version: # lint:ignore:only_variable_string
-    content => 'kibana-config.json.erb',
-    type    => 'config',
-    require => [ Es_Instance_Conn_Validator[$::cirrus_elasticsearch::es_name], File["${import_dir}/config"] ],
+  if $::elasticsearch_9200_name {
+    cirrus_kibana::import { $cirrus_kibana::params::kibana_version: # lint:ignore:only_variable_string
+      content => 'kibana-config.json.erb',
+      type    => 'config',
+      require => [ Es_Instance_Conn_Validator[$::cirrus_elasticsearch::es_name], File["${import_dir}/config"] ],
+    }
   }
 }

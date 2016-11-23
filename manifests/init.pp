@@ -151,13 +151,9 @@ class cirrus_kibana (
     # lint:endignore
   }
 
-  class { '::cirrus_kibana::search':
-    require => Es_Instance_Conn_Validator[$::cirrus_elasticsearch::es_name],
-  }
-  class { '::cirrus_kibana::visualization':
-    require => Es_Instance_Conn_Validator[$::cirrus_elasticsearch::es_name],
-  }
-  class { '::cirrus_kibana::dashboard':
-    require => Es_Instance_Conn_Validator[$::cirrus_elasticsearch::es_name],
+  if $::elasticsearch_9200_name {
+    include ::cirrus_kibana::search
+    include ::cirrus_kibana::visualization
+    include ::cirrus_kibana::dashboard
   }
 }

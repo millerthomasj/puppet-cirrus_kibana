@@ -9,11 +9,13 @@ class cirrus_kibana::nginx(
 {
   include ::nginx
 
-  nginx::resource::upstream { 'kibana4':
-    members => [ 'localhost:5601' ]
+  nginx::resource::vhost { $vhostname:
+    proxy   => 'http://kibana4',
+    require => Class[::nginx::config],
   }
 
-  nginx::resource::vhost { $vhostname:
-    proxy => 'http://kibana4'
+  nginx::resource::upstream { 'kibana4':
+    members => [ 'localhost:5601' ],
+    require => Class[::nginx::config],
   }
 }
