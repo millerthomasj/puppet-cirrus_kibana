@@ -31,8 +31,8 @@ class cirrus_kibana::apache(
 
     $htpasswd_defaults = {
       target      => $user_file,
-      require     => Package['apache2'],
-      notify      => [ Service['apache2'], File[$user_file] ],
+      require     => Package['httpd'],
+      notify      => [ Service['httpd'], File[$user_file] ],
     }
 
     create_resources(htpasswd, $users, $htpasswd_defaults)
